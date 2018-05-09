@@ -279,7 +279,9 @@ class DZMSegmentedControl: UIView,UICollectionViewDelegate,UICollectionViewDataS
             
             if registerScrollView != nil {
                 
-                registerScrollView.removeObserver(self, forKeyPath: "contentOffset", context: nil)
+                registerScrollView?.panGestureRecognizer.removeTarget(self, action: #selector(touchPan(_:)))
+                
+                registerScrollView?.removeObserver(self, forKeyPath: "contentOffset", context: nil)
             }
             
             registerScrollView = scrollView
