@@ -30,6 +30,18 @@ class DZMSegmentedControl: UIView,UICollectionViewDelegate,UICollectionViewDataS
     /// 每个Item四周间距
     var itemInset:UIEdgeInsets = UIEdgeInsetsMake(5, 10, 5, 10)
     
+    /// 内部四周间距
+    var contentInset:UIEdgeInsets = UIEdgeInsets.zero {
+        
+        didSet{
+            
+            if collectionView != nil {
+                
+                collectionView.contentInset = contentInset
+            }
+        }
+    }
+    
     /// 滚动条高度
     var sliderHeight:CGFloat = 3 {
         
@@ -96,6 +108,7 @@ class DZMSegmentedControl: UIView,UICollectionViewDelegate,UICollectionViewDataS
         
         collectionView = UICollectionView.init(frame: bounds, collectionViewLayout: layout)
         collectionView.backgroundColor = UIColor.clear
+        collectionView.contentInset = contentInset
         collectionView.delegate = self
         collectionView.dataSource = self
         collectionView.showsVerticalScrollIndicator = false
@@ -198,9 +211,14 @@ class DZMSegmentedControl: UIView,UICollectionViewDelegate,UICollectionViewDataS
             
             for title in titles {
                 
-                let string = NSAttributedString.init(string: title, attributes: itemAttributes)
+                var itemTitleSize = getItemTitleSize(title, attributes: itemAttributes)
                 
-                let itemTitleSize = string.boundingRect(with: CGSize(width: CGFloat.greatestFiniteMagnitude, height: frame.size.height - itemInset.top - itemInset.bottom), options: [NSStringDrawingOptions.usesLineFragmentOrigin,NSStringDrawingOptions.usesFontLeading], context: nil).size
+                if itemSelectAttributes != nil {
+                    
+                    let itemSelectTitleSize = getItemTitleSize(title, attributes: itemSelectAttributes)
+                    
+                    itemTitleSize = itemTitleSize.width >= itemSelectTitleSize.width ? itemTitleSize : itemSelectTitleSize
+                }
                 
                 let itemSize = CGSize(width: itemTitleSize.width + itemInset.left + itemInset.right, height: frame.size.height)
                 
@@ -221,6 +239,14 @@ class DZMSegmentedControl: UIView,UICollectionViewDelegate,UICollectionViewDataS
             
             itemSliderRects.removeAll()
         }
+    }
+    
+    /// 获取单个Item的大小
+    private func getItemTitleSize(_ title:String, attributes:[NSAttributedStringKey : Any]?) ->CGSize {
+        
+        let string = NSAttributedString.init(string: title, attributes: attributes)
+        
+        return string.boundingRect(with: CGSize(width: CGFloat.greatestFiniteMagnitude, height: frame.size.height - itemInset.top - itemInset.bottom), options: [NSStringDrawingOptions.usesLineFragmentOrigin,NSStringDrawingOptions.usesFontLeading], context: nil).size
     }
     
     /// 设置滚动条到选中位置

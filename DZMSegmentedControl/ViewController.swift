@@ -31,7 +31,7 @@ class ViewController: UIViewController,UICollectionViewDelegate,UICollectionView
     override func viewDidLoad() {
         
         super.viewDidLoad()
-        
+      
         /*
          
          1.创建DZMSegmentedControl
@@ -41,7 +41,7 @@ class ViewController: UIViewController,UICollectionViewDelegate,UICollectionView
         
         segmentedControl = DZMSegmentedControl(frame: CGRect(x: 0, y: 64, width: view.bounds.width, height: 44))
         segmentedControl.itemAttributes = [NSAttributedStringKey.font: UIFont.systemFont(ofSize: 15),NSAttributedStringKey.foregroundColor:UIColor.black]
-        segmentedControl.itemSelectAttributes = [NSAttributedStringKey.font: UIFont.systemFont(ofSize: 15),NSAttributedStringKey.foregroundColor:UIColor.red]
+        segmentedControl.itemSelectAttributes = [NSAttributedStringKey.font: UIFont.boldSystemFont(ofSize: 15),NSAttributedStringKey.foregroundColor:UIColor.red]
         segmentedControl.delegate = self
         segmentedControl.backgroundColor = UIColor.yellow
         view.addSubview(segmentedControl)
